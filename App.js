@@ -343,6 +343,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     padding: 10,
     marginTop: 10,
-    borderRadius: 6,
+    borderRadius: 5,
   },
 });
