@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Toast from 'react-native-toast-message';
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 // Create a context to manage todos state
 const TodosContext = React.createContext({
@@ -122,10 +123,11 @@ function AddNewTodoScreen() {
 
     navigation.navigate('Home'); // Navigate back to the home page
 
-    Toast.show({
-      type: 'success',
-      text1: 'Todo Added Successfully',
-      visibilityTime: 2000,
+    // Show flash message notification
+    showMessage({
+      message: "Todo Added Successfully",
+      type: "success",
+      duration: 3000,
     });
 
     // Clear input fields
@@ -163,6 +165,7 @@ function AddNewTodoScreen() {
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
       </View>
+      <FlashMessage position="top" />
     </View>
   );
 }
@@ -180,6 +183,7 @@ export default function App() {
           <Stack.Screen name="AddNewTodo" component={AddNewTodoScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+      <FlashMessage position="top" />
     </TodosContext.Provider>
   );
 }
