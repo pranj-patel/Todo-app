@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from 'C:\Users\pranj\OneDrive\Desktop\Mobile App\Todo-app\src\components\HomeScreen.js';
-import AddNewTodoScreen from './src/components/AddNewTodoScreen';
+import HomeScreen from '../components/HomeScreen';
+import AddNewTodoScreen from '../components/AddNewTodoScreen';
 
 const Stack = createStackNavigator();
 
