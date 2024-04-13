@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import TodosContext from '../contexts/TodosContext';
 import { showMessage } from "react-native-flash-message";
 import { styles } from '../utils/styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddNewTodoScreen() {
   const navigation = useNavigation();
-  const { setTodos } = React.useContext(TodosContext); // Access setTodos from context
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -16,20 +16,31 @@ function AddNewTodoScreen() {
     navigation.navigate('Home');
   };
 
-  const handleSave = () => {
+  const data = {
+    title: title.trim(),
+    description: description.trim(),
+    complete: false
+  }
+
+  const handleSave = async() => {
     if (title.trim() === '' || description.trim() === '') {
+      Alert.alert('Error', 'error');
       return;
     }
-
-    // Update todos using setTodos from context
-    setTodos(prevTodos => [...prevTodos, { title, description }]);
+    const prevData = await AsyncStorage.getItem('todos');
+    let todos = [];
+    if(prevData) {
+        todos = JSON.parse(prevData);
+    }
+    todos.push(data)
+    await AsyncStorage.setItem('todos', JSON.stringify(todos));
 
     // Show flash message notification
-    showMessage({
-      message: "Todo Added Successfully",
-      type: "success",
-      duration: 3000,
-    });
+    // showMessage({
+    //   message: "Todo Added Successfully",
+    //   type: "success",
+    //   duration: 3000,
+    // });
 
     // Navigate back to the home page with a parameter indicating success
     navigation.navigate('Home', { todoAdded: true });
@@ -43,7 +54,7 @@ function AddNewTodoScreen() {
         <TextInput
           style={styles.input}
           value={title}
-          onChangeText={(text) => setTitle(text)}
+          onChangeText={setTitle}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -51,7 +62,7 @@ function AddNewTodoScreen() {
         <TextInput
           style={styles.multilineInput}
           value={description}
-          onChangeText={(text) => setDescription(text)}
+          onChangeText={setDescription}
           multiline
         />
       </View>
