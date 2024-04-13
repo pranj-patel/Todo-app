@@ -22,29 +22,31 @@ function AddNewTodoScreen() {
     complete: false
   }
 
-  const handleSave = async() => {
+  const handleSave = async () => {
     if (title.trim() === '' || description.trim() === '') {
-      Alert.alert('Error', 'error');
+      Alert.alert('Error', 'Missing title or description');
       return;
     }
     const prevData = await AsyncStorage.getItem('todos');
     let todos = [];
-    if(prevData) {
-        todos = JSON.parse(prevData);
+    if (prevData) {
+      todos = JSON.parse(prevData);
     }
     todos.push(data)
     await AsyncStorage.setItem('todos', JSON.stringify(todos));
 
     // Show flash message notification
-    // showMessage({
-    //   message: "Todo Added Successfully",
-    //   type: "success",
-    //   duration: 3000,
-    // });
+    showMessage({
+      message: "Todo Added Successfully",
+      type: "success",
+      duration: 3000,
+    });
 
     // Navigate back to the home page with a parameter indicating success
     navigation.navigate('Home', { todoAdded: true });
   };
+    
+  
 
   return (
     <View style={styles.container}>
